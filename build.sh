@@ -1,1 +1,1 @@
-gcc -Wall -Wextra main.c trender.c game.c -o main
+gcc -Wall -Wextra main.c trender.c game.c control.c -o main

@@ -1,1 +1,1 @@
- void render_board(void);
+void new_frame(void);

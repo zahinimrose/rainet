@@ -8,7 +8,7 @@ typedef struct
     Game_state state;
     Game_object board[HEIGHT][WIDTH];
     Game_object stacks[PLAYER_COUNT];
-    Card cards[CARDS_PER_PLAYER * 2];
+    Card cards[CARDS_PER_PLAYER * PLAYER_COUNT];
 } Game;
 
 Game game;

@@ -24,3 +24,8 @@ void render_board(void)
         printf("\n");
     }
 }
+
+void new_frame(void) {
+    printf("_____________________________________\n");
+    render_board();
+}
