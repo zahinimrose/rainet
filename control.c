@@ -4,11 +4,51 @@
 #include <stdlib.h>
 
 #include "game.h"
+#include "trender.h"
+
+void cursor_up(void)
+{
+    int i = get_cursor_i();
+    int j = get_cursor_j();
+    if (i <= 0) {
+        return;
+    }
+    set_cursor(i - 1, j);
+}
+
+void cursor_down(void)
+{
+    int i = get_cursor_i();
+    int j = get_cursor_j();
+    if (i >= FRAME_HEIGHT - 1) {
+        return;
+    }
+    set_cursor(i + 1, j);
+}
+
+void cursor_left(void)
+{
+    int i = get_cursor_i();
+    int j = get_cursor_j();
+    if (j <= 0) {
+        return;
+    }
+    set_cursor(i, j - 1);
+}
+
+void cursor_right(void)
+{
+    int i = get_cursor_i();
+    int j = get_cursor_j();
+    if (j >= FRAME_WIDTH - 1) {
+        return;
+    }
+    set_cursor(i, j + 1);
+}
 
 char take_input(void)
 {
     char buf[2];
-    printf("Input:");
     fgets(buf, sizeof(buf), stdin);
 
     return buf[0];
@@ -23,6 +63,20 @@ int input(void)
             printf("Exiting Game\n");
             
             exit(0);
+        case 'w':
+            cursor_up();
+            return 1; break;
+        case 's':
+            cursor_down();
+            return 1;
+        case 'a':
+            cursor_left();
+            return 1;
+        case 'd':
+            cursor_right();
+            return 1;
+        case '\n':
+            return 0;
         default:
             printf("Input %c is not recognized\n", ch);
             return 0;
