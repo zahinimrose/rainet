@@ -8,11 +8,12 @@
 int main(void)
 {
     init_game();
+    set_cursor(0, 0);
     bool running = true;
 
     while(running) {
         new_frame();
-        input();
+        while(!input()) {}
     }
 
     return 0;

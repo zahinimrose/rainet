@@ -14,7 +14,7 @@ char take_input(void)
     return buf[0];
 }
 
-void input(void)
+int input(void)
 {
     char ch = take_input();
 
@@ -25,5 +25,6 @@ void input(void)
             exit(0);
         default:
             printf("Input %c is not recognized\n", ch);
+            return 0;
     }
 }

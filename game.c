@@ -11,7 +11,7 @@ typedef struct
     Card cards[CARDS_PER_PLAYER * PLAYER_COUNT];
 } Game;
 
-Game game;
+static Game game;
 
 void set_game_state(Game_state state)
 {

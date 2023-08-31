@@ -1,1 +1,1 @@
-void input(void);
+int input(void);
