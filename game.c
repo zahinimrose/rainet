@@ -7,6 +7,8 @@ typedef struct
 {
     Game_state state;
     Game_object board[HEIGHT][WIDTH];
+    Game_object stacks[PLAYER_COUNT];
+    Card cards[CARDS_PER_PLAYER * 2];
 } Game;
 
 Game game;
@@ -31,6 +33,15 @@ void board_empty(void)
     }
 }
 
+void place_port(void)
+{
+    game.board[0][3] = PORT;
+    game.board[0][4] = PORT;
+    game.board[7][3] = PORT;
+    game.board[7][4] = PORT;
+
+}
+
 Game_object get_board_object(int i, int j)
 {
     return game.board[i][j];
@@ -40,5 +51,6 @@ void init_game(void)
 {
     set_game_state(INIT);
     board_empty();
+    place_port();
 
 }

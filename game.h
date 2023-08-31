@@ -3,6 +3,8 @@
 
 #define HEIGHT 8
 #define WIDTH 8
+#define PLAYER_COUNT 2
+#define CARDS_PER_PLAYER 8
 
 typedef enum
 {
@@ -17,10 +19,19 @@ typedef enum
 typedef enum
 {
     EMPTY,
-    CARD_LINK,
-    CARD_VIRUS,
-    CORE
+    PORT,
+    CARD,
+    STACK_PLAYER1,
+    STACK_PLAYER2
 } Game_object;
+
+typedef struct
+{
+    enum {PLAYER1, PLAYER2} owner;
+    enum {LINK, VIRUS} type;
+    enum {HIDDEN, REVEALED} visibility;
+    Game_object position;
+} Card;
 
 void init_game(void);
 Game_object get_board_object(int i, int j);

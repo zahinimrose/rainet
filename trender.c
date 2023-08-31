@@ -8,7 +8,8 @@ char symbol(Game_object obj) {
     switch (obj) {
         case EMPTY:
             return '.';
-            break;
+        case PORT:
+            return 'P';
         default:
             assert(false && "Object Rendering not Implemented");
     }
