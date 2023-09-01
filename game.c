@@ -6,7 +6,7 @@
 typedef struct
 {
     Game_state state;
-    Game_object board[HEIGHT][WIDTH];
+    Game_object board[BOARD_HEIGHT][BOARD_WIDTH];
     Game_object stacks[PLAYER_COUNT];
     Card cards[CARDS_PER_PLAYER * PLAYER_COUNT];
 } Game;
@@ -26,8 +26,8 @@ void set_game_state(Game_state state)
 
 void board_empty(void)
 {
-    for(int i = 0; i < HEIGHT; i++) {
-        for(int j = 0; j < WIDTH; j++) {
+    for(int i = 0; i < BOARD_HEIGHT; i++) {
+        for(int j = 0; j < BOARD_WIDTH; j++) {
             game.board[i][j] = EMPTY;
         }
     }

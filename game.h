@@ -1,8 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
-#define HEIGHT 8
-#define WIDTH 8
+#define BOARD_HEIGHT 8
+#define BOARD_WIDTH 8
 #define PLAYER_COUNT 2
 #define CARDS_PER_PLAYER 8
 

@@ -11,8 +11,8 @@
 const char sep = '#';
 const char cursor = 'A';
 const char empty = '_';
-const int board_i = (FRAME_HEIGHT - HEIGHT) / 2 + 1;
-const int board_j = (FRAME_WIDTH - WIDTH) / 2 + 1;
+const int board_i = (FRAME_HEIGHT - BOARD_HEIGHT) / 2 + 1;
+const int board_j = (FRAME_WIDTH - BOARD_WIDTH) / 2 + 1;
 
 static char buf[FRAME_HEIGHT][FRAME_WIDTH];
 static int cursor_i, cursor_j;
@@ -40,8 +40,8 @@ char symbol(Game_object obj) {
 
 void render_board(int x, int y)
 {
-    for(int i = 0; i < HEIGHT; i++) {
-        for(int j = 0; j < WIDTH; j++) {
+    for(int i = 0; i < BOARD_HEIGHT; i++) {
+        for(int j = 0; j < BOARD_WIDTH; j++) {
             buf[x + i][y + j] = symbol(get_board_object(i, j));
         }
     }
