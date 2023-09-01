@@ -11,6 +11,8 @@
 const char sep = '#';
 const char cursor = 'A';
 const char empty = '_';
+const int board_i = (FRAME_HEIGHT - HEIGHT) / 2 + 1;
+const int board_j = (FRAME_WIDTH - WIDTH) / 2 + 1;
 
 static char buf[FRAME_HEIGHT][FRAME_WIDTH];
 static int cursor_i, cursor_j;
@@ -69,7 +71,7 @@ void flush()
 
 void new_frame(void) {
     render_sep(0, 0);
-    render_board(1, 0);
+    render_board(board_i, board_j);
     render_cursor();
     flush();
 }
@@ -99,6 +101,11 @@ int get_cursor_i()
 int get_cursor_j()
 {
     return cursor_j;
+}
+
+Selected get_selected(void)
+{
+    assert(false && "get_selected not implemented");
 }
 
 #endif //TRENDER_H

@@ -6,6 +6,10 @@
 #define PLAYER_COUNT 2
 #define CARDS_PER_PLAYER 8
 
+typedef bool Success;
+#define VALID 1
+#define INVALID 0
+
 typedef enum
 {
     INIT,
@@ -34,6 +38,9 @@ typedef struct
 } Card;
 
 void init_game(void);
+void start_game(void);
 Game_object get_board_object(int i, int j);
+Game_state get_state(void);
+Success place_card(Game_object obj, Card card);
 
 #endif //GAME_H

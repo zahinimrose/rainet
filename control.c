@@ -54,6 +54,11 @@ char take_input(void)
     return buf[0];
 }
 
+void click(void)
+{
+    assert(false && "Not Implemeted");
+}
+
 int input(void)
 {
     char ch = take_input();
@@ -75,6 +80,9 @@ int input(void)
         case 'd':
             cursor_right();
             return 1;
+        case 'z':
+            click();
+            return 1;
         case '\n':
             return 0;
         default:
@@ -82,3 +90,4 @@ int input(void)
             return 0;
     }
 }
+

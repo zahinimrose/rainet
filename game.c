@@ -52,5 +52,20 @@ void init_game(void)
     set_game_state(INIT);
     board_empty();
     place_port();
+}
 
+void start_game(void)
+{
+    game.state = SETUP_PLAYER1;
+    assert(false && "Not Implemented");
+}
+
+Game_state get_state(void)
+{
+    assert(false && "Not Implemented");
+}
+
+Success place_card(Game_object obj, Card card)
+{
+    assert(false && "Not Implemented");
 }
