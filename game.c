@@ -7,7 +7,7 @@ typedef struct
 {
     Player owner;
     enum {LINK, VIRUS} type;
-    enum {HIDDEN, REVEALED} visibility;
+    enum {HIDDEN, REVEALED} visibility; // TODO: Determine if this field can be removed
     Game_object* position;
 } Card;
 
@@ -55,11 +55,23 @@ Board_object get_board_card(Game_object * obj)
 {
     for (int i = 0; i < TOTAL_CARDS; i++)
     {
-        if (game.cards[i].position == obj)
+        Card c = game.cards[i];
+        if (c.position == obj)
         {
-            assert(false && "Returning board object not implemented");
+            
+            if (game.turn != c.owner || c.visibility == HIDDEN) {
+                return BOARD_HIDDEN_CARD;
+            }
+            else if (c.type == LINK) {
+                return BOARD_LINK_CARD;
+            }
+            else if (c.type == VIRUS) {
+                return BOARD_VIRUS_CARD;
+            }
+            assert(false && "Unreachable");
         }
     }
+    assert(false && "Unreachable");
 }
 
 
