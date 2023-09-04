@@ -8,7 +8,7 @@
 #define CARD_TYPE_COUNT 4
 #define TOTAL_CARDS (PLAYER_COUNT * CARDS_PER_PLAYER)
 
-typedef bool Success;
+typedef bool Success; //TODO: Determine if success vaiable is needed
 #define VALID 1
 #define INVALID 0
 

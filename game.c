@@ -129,12 +129,17 @@ void start_game(void)
     assert(game.state == INIT);
     game.state = SETUP;
     game.turn = PLAYER1;
-    assert(false && "Not Implemented");
+
 }
 
 Game_state get_game_state(void)
 {
     return game.state;
+}
+
+void setup(int i, int j)
+{
+    assert(false && "Setup not Implemented");
 }
 
 Success interact_board(int i, int j)
@@ -143,6 +148,9 @@ Success interact_board(int i, int j)
     {
         case INIT:
             start_game();
+            return VALID;
+        case SETUP:
+            setup(i, j);
             return VALID;
         default:
             assert(false && "Interacting in this game state not Implemented");
