@@ -51,29 +51,34 @@ void place_port(void)
 
 }
 
-Board_object get_board_card(Game_object * obj)
+Card* get_card_on_obj(Game_object * obj)
 {
     for (int i = 0; i < TOTAL_CARDS; i++)
     {
-        Card c = game.cards[i];
-        if (c.position == obj)
+        Card* c = &(game.cards[i]);
+        if (c->position == obj)
         {
-            
-            if (game.state == INIT || (c.visibility == HIDDEN && c.owner != game.turn)) {
-                return BOARD_HIDDEN_CARD;
-            }
-            else if (c.type == LINK) {
-                return BOARD_LINK_CARD;
-            }
-            else if (c.type == VIRUS) {
-                return BOARD_VIRUS_CARD;
-            }
-            assert(false && "Unreachable");
+            return c;
         }
+    }
+    return 0;
+}
+
+Board_object get_board_card(Game_object * obj)
+{
+    Card* c = get_card_on_obj(obj);
+        
+    if (game.state == INIT || (c->visibility == HIDDEN && c->owner != game.turn)) {
+        return BOARD_HIDDEN_CARD;
+    }
+    else if (c->type == LINK) {
+        return BOARD_LINK_CARD;
+    }
+    else if (c->type == VIRUS) {
+        return BOARD_VIRUS_CARD;
     }
     assert(false && "Unreachable");
 }
-
 
 Board_object get_board_object(int i, int j)
 {
