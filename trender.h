@@ -1,3 +1,6 @@
+#ifndef TRENDER_H
+#define TRENDER_H
+
 #define FRAME_HEIGHT 15
 #define FRAME_WIDTH  20
 
@@ -16,4 +19,6 @@ void init_cursor();
 void set_cursor(int i, int j);
 int get_cursor_i();
 int get_cursor_j();
-Selected get_selected(void);
+Selected get_selected(void);\
+
+#endif //TRENDER_H

@@ -1,6 +1,3 @@
-#ifndef TRENDER_H
-#define TRENDER_H
-
 #include <stdio.h>
 #include <assert.h>
 #include <stdbool.h>
@@ -107,5 +104,3 @@ Selected get_selected(void)
 {
     assert(false && "get_selected not implemented");
 }
-
-#endif //TRENDER_H
