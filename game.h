@@ -14,11 +14,15 @@ typedef bool Success;
 
 typedef enum
 {
+    PLAYER1,
+    PLAYER2
+} Player;
+
+typedef enum
+{
     INIT,
-    SETUP_PLAYER1,
-    SETUP_PLAYER2,
-    TURN_PLAYER1,
-    TURN_PLAYER2,
+    SETUP,
+    PLAY,
     GAME_OVER
 } Game_state;
 

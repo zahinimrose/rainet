@@ -5,7 +5,7 @@
 
 typedef struct
 {
-    enum {PLAYER1, PLAYER2} owner;
+    Player owner;
     enum {LINK, VIRUS} type;
     enum {HIDDEN, REVEALED} visibility;
     Game_object* position;
@@ -14,6 +14,7 @@ typedef struct
 typedef struct
 {
     Game_state state;
+    Player turn;
     Game_object board[BOARD_HEIGHT][BOARD_WIDTH];
     Game_object stacks[PLAYER_COUNT];
     Card cards[TOTAL_CARDS];
@@ -114,7 +115,8 @@ void init_game(void)
 void start_game(void)
 {
     assert(game.state == INIT);
-    game.state = SETUP_PLAYER1;
+    game.state = SETUP;
+    game.turn = PLAYER1;
     assert(false && "Not Implemented");
 }
 
