@@ -54,6 +54,10 @@ void place_port(void)
 
 Card* get_card_on_obj(Game_object * obj)
 {
+    if (*obj == GAME_EMPTY)
+    {
+        return 0;
+    }
     for (int i = 0; i < TOTAL_CARDS; i++)
     {
         Card* c = &(game.cards[i]);
@@ -62,7 +66,7 @@ Card* get_card_on_obj(Game_object * obj)
             return c;
         }
     }
-    return 0;
+    assert(false && "Unreachable");
 }
 
 Board_object get_board_card(Game_object * obj)
