@@ -102,5 +102,13 @@ Game_state get_game_state(void)
 
 Success interact_board(int i, int j)
 {
-    assert(false && "Interact_board not implemented");
+    switch(game.state)
+    {
+        case INIT:
+            start_game();
+            return VALID;
+        default:
+            assert(false && "Interacting in this game state not Implemented");
+            return INVALID;
+    }
 }
