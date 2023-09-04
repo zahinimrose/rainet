@@ -32,6 +32,10 @@ char symbol(Board_object obj) {
             return 'P';
         case BOARD_HIDDEN_CARD:
             return 'c';
+        case BOARD_LINK_CARD:
+            return 'L';
+        case BOARD_VIRUS_CARD:
+            return 'V';
         default:
             assert(false && "Object Rendering not Implemented");
     }
