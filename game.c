@@ -73,7 +73,7 @@ Game_state get_state(void)
     assert(false && "Not Implemented");
 }
 
-Success place_card(Game_object obj, Card card)
+Success interact_board(int i, int j)
 {
-    assert(false && "Not Implemented");
+    assert(false && "Interact_board not implemented");
 }

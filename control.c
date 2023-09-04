@@ -62,7 +62,8 @@ void click(void)
         case SEL_EMPTY:
             return;
         case SEL_BOARD:
-            assert(false && "Clicking Board Not Implemented");
+            interact_board(get_board_i(), get_board_j());
+            break;
         case SEL_STACK_PLAYER1:
             assert(false && "Selecting Player Stack 1 Not Implemented");
         case SEL_STACK_PLAYER2:

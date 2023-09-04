@@ -35,5 +35,6 @@ void init_game(void);
 void start_game(void);
 Game_object get_board_object(int i, int j);
 Game_state get_state(void);
+Success interact_board(int i, int j);
 
 #endif //GAME_H
