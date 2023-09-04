@@ -56,7 +56,18 @@ char take_input(void)
 
 void click(void)
 {
-    assert(false && "Not Implemeted");
+    Selected s = get_selected();
+    switch (s)
+    {
+        case SEL_EMPTY:
+            return;
+        case SEL_BOARD:
+            assert(false && "Clicking Board Not Implemented");
+        case SEL_STACK_PLAYER1:
+            assert(false && "Selecting Player Stack 1 Not Implemented");
+        case SEL_STACK_PLAYER2:
+            assert(false && "Selecting Player Stack 2 Not Implemented");
+    }
 }
 
 int input(void)

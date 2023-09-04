@@ -102,5 +102,14 @@ int get_cursor_j()
 
 Selected get_selected(void)
 {
-    assert(false && "get_selected not implemented");
+    if (cursor_i >= board_i && 
+        cursor_j >= board_j && 
+        cursor_i < board_i + BOARD_WIDTH && 
+        cursor_j < board_j + BOARD_HEIGHT)
+    {
+        return SEL_BOARD;
+    }
+    else {
+        return SEL_EMPTY;
+    }
 }
