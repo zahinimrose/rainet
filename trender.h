@@ -19,6 +19,8 @@ void init_cursor();
 void set_cursor(int i, int j);
 int get_cursor_i();
 int get_cursor_j();
-Selected get_selected(void);\
+Selected get_selected(void);
+int get_board_i(void);
+int get_board_j(void);
 
 #endif //TRENDER_H

@@ -113,3 +113,16 @@ Selected get_selected(void)
         return SEL_EMPTY;
     }
 }
+
+int get_board_i(void)
+{
+    assert(get_selected() == SEL_BOARD);
+
+    return cursor_i - board_i;
+}
+int get_board_j(void)
+{
+    assert(get_selected() == SEL_BOARD);
+
+    return cursor_j - board_j;
+}
