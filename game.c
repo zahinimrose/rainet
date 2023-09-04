@@ -97,7 +97,7 @@ void start_game(void)
 
 Game_state get_game_state(void)
 {
-    assert(false && "Not Implemented");
+    return game.state;
 }
 
 Success interact_board(int i, int j)
