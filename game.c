@@ -5,6 +5,14 @@
 
 typedef struct
 {
+    enum {PLAYER1, PLAYER2} owner;
+    enum {LINK, VIRUS} type;
+    enum {HIDDEN, REVEALED} visibility;
+    Game_object position;
+} Card;
+
+typedef struct
+{
     Game_state state;
     Game_object board[BOARD_HEIGHT][BOARD_WIDTH];
     Game_object stacks[PLAYER_COUNT];

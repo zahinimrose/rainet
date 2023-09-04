@@ -29,18 +29,11 @@ typedef enum
     STACK_PLAYER2
 } Game_object;
 
-typedef struct
-{
-    enum {PLAYER1, PLAYER2} owner;
-    enum {LINK, VIRUS} type;
-    enum {HIDDEN, REVEALED} visibility;
-    Game_object position;
-} Card;
+
 
 void init_game(void);
 void start_game(void);
 Game_object get_board_object(int i, int j);
 Game_state get_state(void);
-Success place_card(Game_object obj, Card card);
 
 #endif //GAME_H
