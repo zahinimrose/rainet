@@ -60,10 +60,11 @@ void click(void)
     switch (s)
     {
         case SEL_EMPTY:
+            next_phase();
             return;
         case SEL_BOARD:
             interact_board(get_board_i(), get_board_j());
-            break;
+            return;
         case SEL_STACK_PLAYER1:
             assert(false && "Selecting Player Stack 1 Not Implemented");
         case SEL_STACK_PLAYER2:

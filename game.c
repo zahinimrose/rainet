@@ -147,13 +147,24 @@ Success interact_board(int i, int j)
     switch(game.state)
     {
         case INIT:
-            start_game();
-            return VALID;
+            return INVALID;
         case SETUP:
             setup(i, j);
             return VALID;
         default:
             assert(false && "Interacting in this game state not Implemented");
             return INVALID;
+    }
+}
+
+Success next_phase(void)
+{
+    switch(game.state)
+    {
+        case INIT:
+            start_game();
+            return VALID;
+        default:
+            assert(false && "Switching to next phase not implemented");
     }
 }
