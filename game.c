@@ -18,6 +18,7 @@ typedef struct
     Game_object board[BOARD_HEIGHT][BOARD_WIDTH];
     Game_object stacks[PLAYER_COUNT];
     Card cards[TOTAL_CARDS];
+    Card* picked_up_card;
 } Game;
 
 static Game game;
@@ -118,6 +119,7 @@ void init_cards(void)
     for (int i = 0; i < CARD_TYPE_COUNT; i++) {
         game.cards[i + 12] = (Card){PLAYER2, LINK, HIDDEN, &(game.board[1][i + 4])};
     }
+    game.picked_up_card = 0;
     update_board_cards();
 }
 
