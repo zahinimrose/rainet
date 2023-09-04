@@ -111,17 +111,22 @@ void update_board_cards(void)
 
 void init_cards(void)
 {
-    for (int i = 0; i < CARD_TYPE_COUNT; i++) {
-        game.cards[i] = (Card){PLAYER1, LINK, HIDDEN, &(game.board[6][i])};
+    for (int i = 0; i < 3; i++) {
+        game.cards[i] = (Card){PLAYER1, LINK, HIDDEN, &(game.board[7][i])};
     }
-    for (int i = 0; i < CARD_TYPE_COUNT; i++) {
-        game.cards[i + 4] = (Card){PLAYER1, VIRUS, HIDDEN, &(game.board[6][i + 4])};
+    game.cards[3] = (Card){PLAYER1, LINK, HIDDEN, &(game.board[6][3])};
+    game.cards[4] = (Card){PLAYER1, VIRUS, HIDDEN, &(game.board[6][4])};
+    for (int i = 0; i < 3; i++) {
+        game.cards[i + 5] = (Card){PLAYER1, VIRUS, HIDDEN, &(game.board[7][i + 5])};
     }
-    for (int i = 0; i < CARD_TYPE_COUNT; i++) {
-        game.cards[i + 8] = (Card){PLAYER2, LINK, HIDDEN, &(game.board[1][i])};
+
+    for (int i = 0; i < 3; i++) {
+        game.cards[i + 8] = (Card){PLAYER2, LINK, HIDDEN, &(game.board[0][i])};
     }
-    for (int i = 0; i < CARD_TYPE_COUNT; i++) {
-        game.cards[i + 12] = (Card){PLAYER2, LINK, HIDDEN, &(game.board[1][i + 4])};
+    game.cards[11] = (Card){PLAYER2, LINK, HIDDEN, &(game.board[1][3])};
+    game.cards[12] = (Card){PLAYER2, VIRUS, HIDDEN, &(game.board[1][4])};
+    for (int i = 0; i < 3; i++) {
+        game.cards[i + 13] = (Card){PLAYER2, VIRUS, HIDDEN, &(game.board[0][i + 5])};
     }
     game.picked_up_card = 0;
     update_board_cards();
