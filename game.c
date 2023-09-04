@@ -52,7 +52,13 @@ void place_port(void)
 
 Board_object get_board_card(Game_object * obj)
 {
-    assert(false && "Get board card not implemented");
+    for (int i = 0; i < TOTAL_CARDS; i++)
+    {
+        if (game.cards[i].position == obj)
+        {
+            assert(false && "Returning board object not implemented");
+        }
+    }
 }
 
 
