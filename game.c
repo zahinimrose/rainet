@@ -36,30 +36,47 @@ void board_empty(void)
 {
     for(int i = 0; i < BOARD_HEIGHT; i++) {
         for(int j = 0; j < BOARD_WIDTH; j++) {
-            game.board[i][j] = EMPTY;
+            game.board[i][j] = GAME_EMPTY;
         }
     }
 }
 
 void place_port(void)
 {
-    game.board[0][3] = PORT;
-    game.board[0][4] = PORT;
-    game.board[7][3] = PORT;
-    game.board[7][4] = PORT;
+    game.board[0][3] = GAME_PORT;
+    game.board[0][4] = GAME_PORT;
+    game.board[7][3] = GAME_PORT;
+    game.board[7][4] = GAME_PORT;
 
 }
 
-Game_object get_board_object(int i, int j)
+Board_object get_board_card(Game_object * obj)
 {
-    return game.board[i][j];
+    assert(false && "Get board card not implemented");
+}
+
+
+Board_object get_board_object(int i, int j)
+{
+    Game_object* obj = &(game.board[i][j]);
+    switch (*obj)
+    {
+        case GAME_EMPTY: 
+            return BOARD_BLANK;
+        case GAME_PORT:
+            return BOARD_PORT;
+        case GAME_CARD:
+            return get_board_card(obj);
+        default:
+            assert(false && "Unreachable");
+    }
 }
 
 void update_board_cards(void)
 {
     for(int i = 0; i < TOTAL_CARDS; i++)
     {
-        *(game.cards[i].position) = CARD;
+        *(game.cards[i].position) = GAME_CARD;
     }
 }
 

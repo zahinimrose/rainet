@@ -24,13 +24,13 @@ void init_display(void)
     }
 }
 
-char symbol(Game_object obj) {
+char symbol(Board_object obj) {
     switch (obj) {
-        case EMPTY:
+        case BOARD_BLANK:
             return '.';
-        case PORT:
+        case BOARD_PORT:
             return 'P';
-        case CARD:
+        case BOARD_HIDDEN_CARD:
             return 'c';
         default:
             assert(false && "Object Rendering not Implemented");
