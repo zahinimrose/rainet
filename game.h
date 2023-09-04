@@ -5,6 +5,8 @@
 #define BOARD_WIDTH 8
 #define PLAYER_COUNT 2
 #define CARDS_PER_PLAYER 8
+#define CARD_TYPE_COUNT 4
+#define TOTAL_CARDS (PLAYER_COUNT * CARDS_PER_PLAYER)
 
 typedef bool Success;
 #define VALID 1
@@ -34,7 +36,7 @@ typedef enum
 void init_game(void);
 void start_game(void);
 Game_object get_board_object(int i, int j);
-Game_state get_state(void);
+Game_state get_game_state(void);
 Success interact_board(int i, int j);
 
 #endif //GAME_H

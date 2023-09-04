@@ -30,6 +30,8 @@ char symbol(Game_object obj) {
             return '.';
         case PORT:
             return 'P';
+        case CARD:
+            return 'c';
         default:
             assert(false && "Object Rendering not Implemented");
     }

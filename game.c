@@ -8,7 +8,7 @@ typedef struct
     enum {PLAYER1, PLAYER2} owner;
     enum {LINK, VIRUS} type;
     enum {HIDDEN, REVEALED} visibility;
-    Game_object position;
+    Game_object* position;
 } Card;
 
 typedef struct
@@ -16,7 +16,7 @@ typedef struct
     Game_state state;
     Game_object board[BOARD_HEIGHT][BOARD_WIDTH];
     Game_object stacks[PLAYER_COUNT];
-    Card cards[CARDS_PER_PLAYER * PLAYER_COUNT];
+    Card cards[TOTAL_CARDS];
 } Game;
 
 static Game game;
@@ -55,20 +55,47 @@ Game_object get_board_object(int i, int j)
     return game.board[i][j];
 }
 
+void update_board_cards(void)
+{
+    for(int i = 0; i < TOTAL_CARDS; i++)
+    {
+        *(game.cards[i].position) = CARD;
+    }
+}
+
+void init_cards(void)
+{
+    for (int i = 0; i < CARD_TYPE_COUNT; i++) {
+        game.cards[i] = (Card){PLAYER1, LINK, HIDDEN, &(game.board[6][i])};
+    }
+    for (int i = 0; i < CARD_TYPE_COUNT; i++) {
+        game.cards[i + 4] = (Card){PLAYER1, VIRUS, HIDDEN, &(game.board[6][i + 4])};
+    }
+    for (int i = 0; i < CARD_TYPE_COUNT; i++) {
+        game.cards[i + 8] = (Card){PLAYER2, LINK, HIDDEN, &(game.board[1][i])};
+    }
+    for (int i = 0; i < CARD_TYPE_COUNT; i++) {
+        game.cards[i + 12] = (Card){PLAYER2, LINK, HIDDEN, &(game.board[1][i + 4])};
+    }
+    update_board_cards();
+}
+
 void init_game(void)
 {
     set_game_state(INIT);
     board_empty();
     place_port();
+    init_cards();
 }
 
 void start_game(void)
 {
+    assert(game.state == INIT);
     game.state = SETUP_PLAYER1;
     assert(false && "Not Implemented");
 }
 
-Game_state get_state(void)
+Game_state get_game_state(void)
 {
     assert(false && "Not Implemented");
 }
