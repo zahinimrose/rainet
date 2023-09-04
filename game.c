@@ -153,9 +153,60 @@ Game_state get_game_state(void)
     return game.state;
 }
 
+Success move_card(Game_object* target, Game_object* from)
+{
+    assert(*target == GAME_EMPTY && get_card_on_obj(target) == 0);
+    Card* c = get_card_on_obj(from);
+    assert(c != 0);
+    c->position = target;
+    *from = GAME_EMPTY;
+    *target = GAME_CARD;
+
+    return VALID; // Will return valid for now. Error handle later
+}
+
+Success setup_player1(int i ,int j)
+{
+    assert(((i == 7) && ((0 <= j && j < 3) || (5 <= j && j < 8) )) || ((i == 6) && (j == 3 || j == 4)));
+    Game_object* obj = &(game.board[i][j]);
+    Card* hand = game.picked_up_card;
+    if (*obj == GAME_CARD && hand == 0)
+    {
+        game.picked_up_card = get_card_on_obj(obj);
+        *obj = GAME_EMPTY;
+        return VALID;
+    }
+    else if (*obj == GAME_CARD && hand != 0)
+    {
+        move_card(hand->position, obj);
+        *obj = GAME_CARD;
+        hand->position = obj;
+        game.picked_up_card = 0;
+        return VALID;
+
+    }
+    assert(false && "Unreachable");
+    return INVALID;
+}
+
+Success setup_player2(int i, int j)
+{
+    assert(false && "setup_player2 not implemented");
+}
+
 void setup(int i, int j)
 {
-    assert(false && "Setup not Implemented");
+    switch(game.turn)
+    {
+        case PLAYER1:
+            setup_player1(i, j);
+            break;
+        case PLAYER2:
+            setup_player2(i, j);
+            break;
+        default:
+            assert(false && "Unreachable");
+    }
 }
 
 Success interact_board(int i, int j)
