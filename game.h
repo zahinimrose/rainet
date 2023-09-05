@@ -28,15 +28,6 @@ typedef enum
 
 typedef enum
 {
-    GAME_EMPTY,
-    GAME_PORT,
-    GAME_CARD,
-    GAME_STACK_PLAYER1,
-    GAME_STACK_PLAYER2
-} Game_object;
-
-typedef enum
-{
     BOARD_BLANK,
     BOARD_PORT,
     BOARD_HIDDEN_CARD,
@@ -49,6 +40,7 @@ void init_game(void);
 void start_game(void);
 Board_object get_board_object(int i, int j);
 Game_state get_game_state(void);
+Player get_turn(void);
 Success interact_board(int i, int j);
 Success next_phase(void);
 

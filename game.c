@@ -3,6 +3,15 @@
 
 #include "game.h"
 
+typedef enum
+{
+    GAME_EMPTY,
+    GAME_PORT,
+    GAME_CARD,
+    GAME_STACK_PLAYER1,
+    GAME_STACK_PLAYER2
+} Game_object;
+
 typedef struct
 {
     Player owner;
@@ -262,4 +271,9 @@ Success next_phase(void)
         default:
             assert(false && "Switching to next phase not implemented");
     }
+}
+
+Player get_turn(void)
+{
+    return game.turn;
 }
