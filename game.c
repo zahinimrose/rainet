@@ -170,14 +170,14 @@ Success setup(int i, int j)
     Game_object* obj = &(game.board[i][j]);
     assert(*obj == GAME_CARD);
     Card* hand = game.picked_up_card;
-    if (*obj == GAME_CARD && hand == 0)
+    if (hand == 0)
     {
         game.picked_up_card = get_card_on_obj(obj);
         assert(game.picked_up_card->owner == game.turn);
         *obj = GAME_EMPTY;
         return VALID;
     }
-    else if (*obj == GAME_CARD && hand != 0)
+    else if (hand != 0)
     {
         move_card(hand->position, obj);
         *obj = GAME_CARD;
@@ -189,6 +189,35 @@ Success setup(int i, int j)
     return INVALID;
 }
 
+Success play(int i, int j)
+{
+    Game_object* obj = &(game.board[i][j]);
+    Card* hand = game.picked_up_card;
+    if (*obj == GAME_CARD && hand == 0)
+    {
+        game.picked_up_card = get_card_on_obj(obj);
+        assert(game.picked_up_card->owner == game.turn);
+        *obj = GAME_EMPTY;
+        return VALID;
+    }
+    assert(obj == (hand->position) + 1 ||
+           obj == (hand->position) - 1 ||
+           obj == (hand->position) + BOARD_WIDTH ||
+           obj == (hand->position) - BOARD_WIDTH);
+    assert(hand != 0);
+    if(*obj == GAME_EMPTY)
+    {
+        *obj = GAME_CARD;
+        hand->position = obj;
+        game.picked_up_card = 0;
+        game.turn = game.turn == PLAYER1 ? PLAYER2 : PLAYER1;
+        return VALID;
+    }
+    
+    assert(false && "Capturing Cards Not Implemented");
+    return INVALID;
+}
+
 Success interact_board(int i, int j)
 {
     switch(game.state)
@@ -197,6 +226,9 @@ Success interact_board(int i, int j)
             return INVALID;
         case SETUP:
             setup(i, j);
+            return VALID;
+        case PLAY:
+            play(i, j);
             return VALID;
         default:
             assert(false && "Interacting in this game state not Implemented");
