@@ -84,9 +84,9 @@ void flush()
 void new_frame(void) {
     render_sep(0, 0);
     render_board(board_i, board_j);
-    render_cursor();
     render_stack(board_i + 9, board_j, PLAYER1);
     render_stack(board_i - 2, board_j, PLAYER2);
+    render_cursor();
     flush();
 }
     
