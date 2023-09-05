@@ -157,7 +157,7 @@ Success move_card(Game_object* target, Game_object* from)
 {
     assert(*target == GAME_EMPTY && get_card_on_obj(target) == 0);
     Card* c = get_card_on_obj(from);
-    assert(c != 0);
+    assert(c != 0 && c->owner == game.turn);
     c->position = target;
     *from = GAME_EMPTY;
     *target = GAME_CARD;
@@ -165,14 +165,15 @@ Success move_card(Game_object* target, Game_object* from)
     return VALID; // Will return valid for now. Error handle later
 }
 
-Success setup_player1(int i ,int j)
+Success setup(int i, int j)
 {
-    assert(((i == 7) && ((0 <= j && j < 3) || (5 <= j && j < 8) )) || ((i == 6) && (j == 3 || j == 4)));
     Game_object* obj = &(game.board[i][j]);
+    assert(*obj == GAME_CARD);
     Card* hand = game.picked_up_card;
     if (*obj == GAME_CARD && hand == 0)
     {
         game.picked_up_card = get_card_on_obj(obj);
+        assert(game.picked_up_card->owner == game.turn);
         *obj = GAME_EMPTY;
         return VALID;
     }
@@ -183,30 +184,9 @@ Success setup_player1(int i ,int j)
         hand->position = obj;
         game.picked_up_card = 0;
         return VALID;
-
     }
     assert(false && "Unreachable");
     return INVALID;
-}
-
-Success setup_player2(int i, int j)
-{
-    assert(false && "setup_player2 not implemented");
-}
-
-void setup(int i, int j)
-{
-    switch(game.turn)
-    {
-        case PLAYER1:
-            setup_player1(i, j);
-            break;
-        case PLAYER2:
-            setup_player2(i, j);
-            break;
-        default:
-            assert(false && "Unreachable");
-    }
 }
 
 Success interact_board(int i, int j)
@@ -231,6 +211,22 @@ Success next_phase(void)
         case INIT:
             start_game();
             return VALID;
+        case SETUP:
+            assert(game.picked_up_card == 0);
+            if (game.turn == PLAYER1) {
+                game.turn = PLAYER2;
+
+                return VALID;
+            }
+            else if (game.turn == PLAYER2) {
+                game.state = PLAY;
+                game.turn = PLAYER1;
+
+                return VALID;
+            }
+            assert(false && "Unreachable");
+        case PLAY:
+            assert(false && "Next_phase of PLAY not Implemented");
         default:
             assert(false && "Switching to next phase not implemented");
     }
