@@ -275,3 +275,32 @@ Player get_turn(void)
 {
     return game.turn;
 }
+
+void get_stack(Board_object* buf, int num, Player player)
+{
+    assert(num >= 8);
+    Game_object* obj;
+    switch(player)
+    {
+        case PLAYER1:
+            obj = &(game.stacks[0]);
+            break;
+        case PLAYER2:
+            obj = &(game.stacks[1]);
+            break;
+    }
+    int i = 0;
+    int j = 0;
+    while(j < TOTAL_CARDS) {
+        Card* c = &(game.cards[j]);
+        if (c->position == obj) {
+            buf[i] = get_board_obj_from_card(c);
+            i++;
+        }
+        j++;
+    }
+    while (i < num) {
+        buf[i] = BOARD_BLANK;
+        i++;
+    }
+}

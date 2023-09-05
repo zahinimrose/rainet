@@ -41,5 +41,6 @@ Game_state get_game_state(void);
 Player get_turn(void);
 Success interact_board(int i, int j);
 Success next_phase(void);
+void get_stack(Board_object* buf, int num, Player player);
 
 #endif //GAME_H
