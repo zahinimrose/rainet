@@ -96,6 +96,9 @@ int input(void)
         case 'z':
             click();
             return 0;
+        case 'r':
+            init_game();
+            return 1;
         case '\n':
             return 1;
         default:
