@@ -198,6 +198,7 @@ Success setup(int i, int j)
 Success play(int i, int j)
 {
     Game_object* obj = &(game.board[i][j]);
+    assert(*obj == GAME_CARD || *obj == GAME_EMPTY);
     Card* hand = game.picked_up_card;
     if (*obj == GAME_CARD && hand == 0)
     {
@@ -211,7 +212,7 @@ Success play(int i, int j)
            obj == (hand->position) + BOARD_WIDTH ||
            obj == (hand->position) - BOARD_WIDTH);
     assert(hand != 0);
-    if(*obj == GAME_EMPTY)
+    if(*obj == GAME_EMPTY && hand != 0)
     {
         *obj = GAME_CARD;
         hand->position = obj;
@@ -219,8 +220,20 @@ Success play(int i, int j)
         game.turn = game.turn == PLAYER1 ? PLAYER2 : PLAYER1;
         return VALID;
     }
+    if (*obj == GAME_CARD && hand != 0)
+    {
+        Card* captured = get_card_on_obj(obj);
+        assert(captured->owner != game.turn);
+        captured->visibility = REVEALED;
+        captured->position = &(game.stacks[game.turn]);
+        *(hand->position) = GAME_EMPTY;
+        hand->position = obj;
+        game.picked_up_card = 0;
+        game.turn = game.turn == PLAYER1 ? PLAYER2 : PLAYER1;
+        return VALID;
+    }
     
-    assert(false && "Capturing Cards Not Implemented");
+    assert(false && "Unreachable");
     return INVALID;
 }
 
