@@ -78,10 +78,8 @@ Card* get_card_on_obj(Game_object * obj)
     assert(false && "Unreachable");
 }
 
-Board_object get_board_card(Game_object * obj)
+Board_object get_board_obj_from_card(Card* c)
 {
-    Card* c = get_card_on_obj(obj);
-        
     if (game.state == INIT || (c->visibility == HIDDEN && c->owner != game.turn)) {
         return BOARD_HIDDEN_CARD;
     }
@@ -92,6 +90,13 @@ Board_object get_board_card(Game_object * obj)
         return BOARD_VIRUS_CARD;
     }
     assert(false && "Unreachable");
+}
+
+Board_object get_board_card(Game_object * obj)
+{
+    Card* c = get_card_on_obj(obj);
+        
+    return get_board_obj_from_card(c);
 }
 
 Board_object get_board_object(int i, int j)
