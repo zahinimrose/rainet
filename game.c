@@ -152,6 +152,8 @@ void init_game(void)
     board_empty();
     place_port();
     init_cards();
+    game.picked_up_card = 0;
+    game.turn = PLAYER1;
 }
 
 Game_state get_game_state(void)
