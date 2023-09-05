@@ -83,21 +83,21 @@ int input(void)
             exit(0);
         case 'w':
             cursor_up();
-            return 1; break;
+            return 0;
         case 's':
             cursor_down();
-            return 1;
+            return 0;
         case 'a':
             cursor_left();
-            return 1;
+            return 0;
         case 'd':
             cursor_right();
-            return 1;
+            return 0;
         case 'z':
             click();
-            return 1;
-        case '\n':
             return 0;
+        case '\n':
+            return 1;
         default:
             printf("Input %c is not recognized\n", ch);
             return 0;
