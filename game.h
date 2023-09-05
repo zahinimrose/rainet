@@ -8,7 +8,7 @@
 #define CARD_TYPE_COUNT 4
 #define TOTAL_CARDS (PLAYER_COUNT * CARDS_PER_PLAYER)
 
-typedef bool Success; //TODO: Determine if success vaiable is needed
+typedef bool Success; //TODO: Determine if success variable is needed
 #define VALID 1
 #define INVALID 0
 
@@ -35,9 +35,7 @@ typedef enum
     BOARD_VIRUS_CARD
 } Board_object;
 
-
 void init_game(void);
-void start_game(void);
 Board_object get_board_object(int i, int j);
 Game_state get_game_state(void);
 Player get_turn(void);

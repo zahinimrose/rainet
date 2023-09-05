@@ -149,14 +149,6 @@ void init_game(void)
     init_cards();
 }
 
-void start_game(void)
-{
-    assert(game.state == INIT);
-    game.state = SETUP;
-    game.turn = PLAYER1;
-
-}
-
 Game_state get_game_state(void)
 {
     return game.state;
@@ -250,7 +242,8 @@ Success next_phase(void)
     switch(game.state)
     {
         case INIT:
-            start_game();
+            game.state = SETUP;
+            game.turn = PLAYER1;
             return VALID;
         case SETUP:
             assert(game.picked_up_card == 0);
