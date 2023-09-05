@@ -63,6 +63,15 @@ void render_cursor()
     buf[cursor_i][cursor_j] = cursor;
 }
 
+void render_stack(int x, int y, Player player) {
+    Board_object stack[CARDS_PER_PLAYER];
+    get_stack(stack, CARDS_PER_PLAYER, player);
+    for (int i = 0; i < CARDS_PER_PLAYER; i++)
+    {
+        buf[x][y + i] = symbol(stack[i]);
+    }
+}
+
 void flush()
 {
     for (int i = 0; i < FRAME_HEIGHT; i++)
@@ -76,9 +85,11 @@ void new_frame(void) {
     render_sep(0, 0);
     render_board(board_i, board_j);
     render_cursor();
+    render_stack(board_i + 9, board_j, PLAYER1);
+    render_stack(board_i - 2, board_j, PLAYER2);
     flush();
 }
-
+    
 void init_cursor()
 {
     cursor_i = 0;
