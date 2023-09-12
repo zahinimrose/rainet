@@ -19,6 +19,7 @@ typedef struct
 typedef struct
 {
     Card* card[TOTAL_CARDS]; // TODO: check if maximum number of card slot is needed
+    int ptr;
 } Stack;
 
 
@@ -30,6 +31,7 @@ typedef struct
     Stack stacks[PLAYER_COUNT];
     Card cards[TOTAL_CARDS];
     Card* picked_up_card; //TODO: Check if this is needed
+    Board_slot* picked_from;
 } Game;
 
 static Game game; //Global game state
@@ -80,44 +82,63 @@ Board_object get_board_object(int i, int j)
 
 }
 
-void update_board_cards(void)
+void place_card(int i, int j, Card* card) //TODO: Explore card by id
 {
-    for(int i = 0; i < TOTAL_CARDS; i++)
-    {
-        *(game.cards[i].position) = GAME_CARD;
-    }
+    game.board[i][j].card = card;
+}
+
+void set_up_cards()
+{
+        place_card(7, 0, &(game.cards[0]));
+        place_card(7, 1, &(game.cards[1]));
+        place_card(7, 2, &(game.cards[2]));
+        place_card(6, 3, &(game.cards[3]));
+
+        place_card(6, 4, &(game.cards[4]));
+        place_card(7, 5, &(game.cards[5]));
+        place_card(7, 6, &(game.cards[6]));
+        place_card(7, 7, &(game.cards[7]));
+
+        place_card(0, 0, &(game.cards[8]));
+        place_card(0, 1, &(game.cards[9]));
+        place_card(0, 2, &(game.cards[10]));
+        place_card(1, 3, &(game.cards[11]));
+
+        place_card(1, 4, &(game.cards[12]));
+        place_card(0, 5, &(game.cards[13]));
+        place_card(0, 6, &(game.cards[14]));
+        place_card(0, 7, &(game.cards[15]));
 }
 
 void init_cards(void)
 {
-    for (int i = 0; i < 3; i++) {
-        game.cards[i] = (Card){PLAYER1, LINK, HIDDEN, &(game.board[7][i])};
+    for (int i = 0; i < 4; i++) {
+        game.cards[i] = (Card){PLAYER1, LINK, HIDDEN};
     }
-    game.cards[3] = (Card){PLAYER1, LINK, HIDDEN, &(game.board[6][3])};
-    game.cards[4] = (Card){PLAYER1, VIRUS, HIDDEN, &(game.board[6][4])};
-    for (int i = 0; i < 3; i++) {
-        game.cards[i + 5] = (Card){PLAYER1, VIRUS, HIDDEN, &(game.board[7][i + 5])};
+    game.cards[3] = (Card){PLAYER1, LINK, HIDDEN};
+
+    for (int i = 0; i < 4; i++) {
+        game.cards[i + 4] = (Card){PLAYER1, VIRUS, HIDDEN};
     }
 
-    for (int i = 0; i < 3; i++) {
-        game.cards[i + 8] = (Card){PLAYER2, LINK, HIDDEN, &(game.board[0][i])};
+    for (int i = 0; i < 4; i++) {
+        game.cards[i + 8] = (Card){PLAYER2, LINK, HIDDEN};
     }
-    game.cards[11] = (Card){PLAYER2, LINK, HIDDEN, &(game.board[1][3])};
-    game.cards[12] = (Card){PLAYER2, VIRUS, HIDDEN, &(game.board[1][4])};
-    for (int i = 0; i < 3; i++) {
-        game.cards[i + 13] = (Card){PLAYER2, VIRUS, HIDDEN, &(game.board[0][i + 5])};
+    for (int i = 0; i < 4; i++) {
+        game.cards[i + 12] = (Card){PLAYER2, VIRUS, HIDDEN};
     }
     game.picked_up_card = 0;
-    update_board_cards();
+    set_up_cards();
 }
 
 void init_game(void)
 {
-    set_game_state(INIT);
+    game.state = INIT;
     board_empty();
     place_port();
     init_cards();
     game.picked_up_card = 0;
+    game.picked_from = 0;
     game.turn = PLAYER1;
 }
 
@@ -126,36 +147,34 @@ Game_state get_game_state(void)
     return game.state;
 }
 
-Success move_card(Game_object* target, Game_object* from)
+Success move_card(Board_slot* target, Board_slot* from)
 {
-    assert(*target == GAME_EMPTY && get_card_on_obj(target) == 0);
-    Card* c = get_card_on_obj(from);
+    assert(target->card == 0);
+    Card* c = from->card;
     assert(c != 0 && c->owner == game.turn);
-    c->position = target;
-    *from = GAME_EMPTY;
-    *target = GAME_CARD;
-
+    target->card = c;
+    from->card = 0;
     return VALID; // Will return valid for now. Error handle later
 }
 
 Success setup(int i, int j)
 {
-    Game_object* obj = &(game.board[i][j]);
-    assert(*obj == GAME_CARD);
+    Board_slot* slot = &(game.board[i][j]);
     Card* hand = game.picked_up_card;
-    if (hand == 0)
+    if (hand == 0 && game.picked_from == 0)
     {
-        game.picked_up_card = get_card_on_obj(obj);
+        game.picked_up_card = slot->card;
+        game.picked_from = slot;
         assert(game.picked_up_card->owner == game.turn);
-        *obj = GAME_EMPTY;
+        slot->card = 0;
         return VALID;
     }
-    else if (hand != 0)
+    else if (hand != 0 && game.picked_from != 0)
     {
-        move_card(hand->position, obj);
-        *obj = GAME_CARD;
-        hand->position = obj;
+        move_card(game.picked_from, slot);
+        slot->card = hand;
         game.picked_up_card = 0;
+        game.picked_from = 0;
         return VALID;
     }
     assert(false && "Unreachable");
@@ -164,38 +183,43 @@ Success setup(int i, int j)
 
 Success play(int i, int j)
 {
-    Game_object* obj = &(game.board[i][j]);
-    assert(*obj == GAME_CARD || *obj == GAME_EMPTY);
+    Board_slot* slot= &(game.board[i][j]);
     Card* hand = game.picked_up_card;
-    if (*obj == GAME_CARD && hand == 0)
+    if (slot->card != 0 && hand == 0 && game.picked_from == 0)
     {
-        game.picked_up_card = get_card_on_obj(obj);
+        game.picked_up_card = slot->card;
+        game.picked_from = slot;
         assert(game.picked_up_card->owner == game.turn);
-        *obj = GAME_EMPTY;
+        slot->card = 0;
         return VALID;
     }
-    assert(obj == (hand->position) + 1 ||
-           obj == (hand->position) - 1 ||
-           obj == (hand->position) + BOARD_WIDTH ||
-           obj == (hand->position) - BOARD_WIDTH);
+    assert(slot== (game.picked_from) + 1 ||
+           slot== (game.picked_from) - 1 ||
+           slot== (game.picked_from) + BOARD_WIDTH ||
+           slot== (game.picked_from) - BOARD_WIDTH);
     assert(hand != 0);
-    if(*obj == GAME_EMPTY && hand != 0)
+    if(slot->card == 0 && hand != 0 && game.picked_from !=0)
     {
-        *obj = GAME_CARD;
-        hand->position = obj;
+        slot->card = hand;
+        game.picked_from = 0;
         game.picked_up_card = 0;
+
         game.turn = game.turn == PLAYER1 ? PLAYER2 : PLAYER1;
         return VALID;
     }
-    if (*obj == GAME_CARD && hand != 0)
+    if (slot->card != 0 && hand != 0 && game.picked_from != 0)
     {
-        Card* captured = get_card_on_obj(obj);
+        Card* captured = slot->card;
         assert(captured->owner != game.turn);
         captured->visibility = REVEALED;
-        captured->position = &(game.stacks[game.turn]);
-        *(hand->position) = GAME_EMPTY;
-        hand->position = obj;
+
+        Stack* st = &(game.stacks[game.turn]);
+        st->card[st->ptr] = captured;
+        (st->ptr)++;
+
+        slot->card = hand;
         game.picked_up_card = 0;
+        game.picked_from = 0;
         game.turn = game.turn == PLAYER1 ? PLAYER2 : PLAYER1;
         return VALID;
     }
@@ -259,24 +283,17 @@ Player get_turn(void)
 void get_stack(Board_object* buf, int num, Player player)
 {
     assert(num >= 8);
-    Game_object* obj;
-    switch(player)
-    {
-        case PLAYER1:
-            obj = &(game.stacks[0]);
-            break;
-        case PLAYER2:
-            obj = &(game.stacks[1]);
-            break;
-    }
+    
+    Stack* st = &(game.stacks[player]);
+
     int i = 0;
     int j = 0;
-    while(j < TOTAL_CARDS) {
-        Card* c = &(game.cards[j]);
-        if (c->position == obj) {
-            buf[i] = get_board_obj_from_card(c);
-            i++;
-        }
+
+
+    while(j < st->ptr) { //TODO: Check if its enough
+        
+        buf[i] = get_board_obj_from_card(st->card[j]);
+        i++;
         j++;
     }
     while (i < num) {
