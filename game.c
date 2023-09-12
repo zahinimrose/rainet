@@ -34,50 +34,23 @@ typedef struct
 
 static Game game; //Global game state
 
-void set_game_state(Game_state state)
-{
-    switch (state) {
-        case INIT:
-            game.state = INIT;
-            break;
-        default:
-            assert(false && "Setting state not Implemented");
-    }
-}
-
 void board_empty(void)
 {
     for(int i = 0; i < BOARD_HEIGHT; i++) {
         for(int j = 0; j < BOARD_WIDTH; j++) {
-            game.board[i][j] = GAME_EMPTY;
+            game.board[i][j].card = 0;
+            game.board[i][j].is_port = false;
         }
     }
 }
 
 void place_port(void)
 {
-    game.board[0][3] = GAME_PORT;
-    game.board[0][4] = GAME_PORT;
-    game.board[7][3] = GAME_PORT;
-    game.board[7][4] = GAME_PORT;
+    game.board[0][3].is_port = true;
+    game.board[0][4].is_port = true;
+    game.board[7][3].is_port = true;
+    game.board[7][4].is_port = true;
 
-}
-
-Card* get_card_on_obj(Game_object * obj)
-{
-    if (*obj == GAME_EMPTY)
-    {
-        return 0;
-    }
-    for (int i = 0; i < TOTAL_CARDS; i++)
-    {
-        Card* c = &(game.cards[i]);
-        if (c->position == obj)
-        {
-            return c;
-        }
-    }
-    assert(false && "Unreachable");
 }
 
 Board_object get_board_obj_from_card(Card* c)
@@ -94,27 +67,17 @@ Board_object get_board_obj_from_card(Card* c)
     assert(false && "Unreachable");
 }
 
-Board_object get_board_card(Game_object * obj)
-{
-    Card* c = get_card_on_obj(obj);
-        
-    return get_board_obj_from_card(c);
-}
-
 Board_object get_board_object(int i, int j)
 {
-    Game_object* obj = &(game.board[i][j]);
-    switch (*obj)
-    {
-        case GAME_EMPTY: 
-            return BOARD_BLANK;
-        case GAME_PORT:
-            return BOARD_PORT;
-        case GAME_CARD:
-            return get_board_card(obj);
-        default:
-            assert(false && "Unreachable");
+    Board_slot* slot = &(game.board[i][j]);
+
+    if (slot->card == 0) {
+        return slot->is_port ? BOARD_PORT : BOARD_BLANK;
     }
+    else {
+        return get_board_obj_from_card(slot->card);
+    }
+
 }
 
 void update_board_cards(void)
