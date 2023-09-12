@@ -3,34 +3,36 @@
 
 #include "game.h"
 
-typedef enum
-{
-    GAME_EMPTY,
-    GAME_PORT,
-    GAME_CARD,
-    GAME_STACK_PLAYER1,
-    GAME_STACK_PLAYER2
-} Game_object;
-
 typedef struct
 {
     Player owner;
     enum {LINK, VIRUS} type;
     enum {HIDDEN, REVEALED} visibility; // Visibility to all player
-    Game_object* position;
 } Card;
+
+typedef struct
+{
+    Card* card;
+    bool is_port;
+} Board_slot;
+
+typedef struct
+{
+    Card* card[TOTAL_CARDS]; // TODO: check if maximum number of card slot is needed
+} Stack;
+
 
 typedef struct
 {
     Game_state state;
     Player turn;
-    Game_object board[BOARD_HEIGHT][BOARD_WIDTH];
-    Game_object stacks[PLAYER_COUNT];
+    Board_slot board[BOARD_HEIGHT][BOARD_WIDTH];
+    Stack stacks[PLAYER_COUNT];
     Card cards[TOTAL_CARDS];
-    Card* picked_up_card;
+    Card* picked_up_card; //TODO: Check if this is needed
 } Game;
 
-static Game game;
+static Game game; //Global game state
 
 void set_game_state(Game_state state)
 {
