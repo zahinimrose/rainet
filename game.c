@@ -287,14 +287,13 @@ void get_stack(Board_object* buf, int num, Player player)
     Stack* st = &(game.stacks[player]);
 
     int i = 0;
-    int j = 0;
 
 
-    while(j < st->ptr) { //TODO: Check if its enough
+    while(i < st->ptr) { //TODO: Check if its enough
         
-        buf[i] = get_board_obj_from_card(st->card[j]);
+        buf[i] = get_board_obj_from_card(st->card[i]);
         i++;
-        j++;
+        
     }
     while (i < num) {
         buf[i] = BOARD_BLANK;
