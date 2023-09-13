@@ -269,7 +269,11 @@ Success next_phase(void)
             }
             assert(false && "Unreachable");
         case PLAY:
-            assert(false && "Next_phase of PLAY not Implemented");
+            if(claim_victory(game.turn) == VALID)
+            {
+                game.state = GAME_OVER;
+            }
+            return VALID;
         default:
             assert(false && "Switching to next phase not implemented");
     }
@@ -299,4 +303,46 @@ void get_stack(Board_object* buf, int num, Player player)
         buf[i] = BOARD_BLANK;
         i++;
     }
+}
+
+Success claim_victory(Player player)
+{
+    assert(player == game.turn);
+    Stack player_stack = game.stacks[player];
+    
+    int link_card_count = 0;
+    for (int i = 0; i < player_stack.ptr; i++)
+    {
+        if (player_stack.card[i]->type == LINK) {
+            link_card_count++;
+        }
+    }
+    if (link_card_count > 3)
+    {
+        return VALID;
+    }
+
+    Player opponent = player == PLAYER1 ? PLAYER2 : PLAYER1;
+    Stack opponent_stack = game.stacks[opponent];
+    int virus_card_count = 0;
+
+    for (int i = 0; i < opponent_stack.ptr; i++)
+    {
+        if (opponent_stack.card[i]->type == VIRUS && opponent_stack.card[i]->visibility == REVEALED) {
+            virus_card_count++;
+        }
+    }
+    if (virus_card_count > 3)
+    {
+        return VALID;
+    }
+
+    return INVALID;
+
+}
+
+Player get_winner()
+{
+    assert(game.state == GAME_OVER);
+    return game.turn;
 }
