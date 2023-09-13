@@ -13,7 +13,7 @@ typedef struct
 typedef struct
 {
     Card* card;
-    bool is_port;
+    Player port;
 } Board_slot;
 
 typedef struct
@@ -41,17 +41,18 @@ void board_empty(void)
     for(int i = 0; i < BOARD_HEIGHT; i++) {
         for(int j = 0; j < BOARD_WIDTH; j++) {
             game.board[i][j].card = 0;
-            game.board[i][j].is_port = false;
+            game.board[i][j].port = PLAYER_NONE;            
         }
     }
 }
 
 void place_port(void)
 {
-    game.board[0][3].is_port = true;
-    game.board[0][4].is_port = true;
-    game.board[7][3].is_port = true;
-    game.board[7][4].is_port = true;
+    game.board[0][3].port = PLAYER2;
+    game.board[0][4].port = PLAYER2;
+
+    game.board[7][3].port = PLAYER1;
+    game.board[7][4].port = PLAYER1;
 
 }
 
@@ -74,7 +75,7 @@ Board_object get_board_object(int i, int j)
     Board_slot* slot = &(game.board[i][j]);
 
     if (slot->card == 0) {
-        return slot->is_port ? BOARD_PORT : BOARD_BLANK;
+        return (slot->port == PLAYER_NONE) ? BOARD_BLANK : BOARD_PORT;
     }
     else {
         return get_board_obj_from_card(slot->card);
@@ -193,6 +194,18 @@ Success play(int i, int j)
         slot->card = 0;
         return VALID;
     }
+    if(slot->port != PLAYER_NONE && game.picked_from->port != PLAYER_NONE && hand != 0)
+    {
+
+        Stack* st = &(game.stacks[game.turn]);
+        st->card[st->ptr] = hand;
+        (st->ptr)++;
+
+        game.picked_up_card = 0;
+        game.picked_from = 0;
+        game.turn = game.turn == PLAYER1 ? PLAYER2 : PLAYER1;
+        return VALID;
+    }
     assert(slot== (game.picked_from) + 1 ||
            slot== (game.picked_from) - 1 ||
            slot== (game.picked_from) + BOARD_WIDTH ||
@@ -246,6 +259,42 @@ Success interact_board(int i, int j)
     }
 }
 
+Success claim_victory(Player player)
+{
+    assert(player == game.turn && player != PLAYER_NONE);
+    Stack player_stack = game.stacks[player];
+    
+    int link_card_count = 0;
+    for (int i = 0; i < player_stack.ptr; i++)
+    {
+        if (player_stack.card[i]->type == LINK) {
+            link_card_count++;
+        }
+    }
+    if (link_card_count > 3)
+    {
+        return VALID;
+    }
+
+    Player opponent = player == PLAYER1 ? PLAYER2 : PLAYER1;
+    Stack opponent_stack = game.stacks[opponent];
+    int virus_card_count = 0;
+
+    for (int i = 0; i < opponent_stack.ptr; i++)
+    {
+        if (opponent_stack.card[i]->type == VIRUS && opponent_stack.card[i]->visibility == REVEALED) {
+            virus_card_count++;
+        }
+    }
+    if (virus_card_count > 3)
+    {
+        return VALID;
+    }
+
+    return INVALID;
+
+}
+
 Success next_phase(void)
 {
     switch(game.state)
@@ -286,6 +335,7 @@ Player get_turn(void)
 
 void get_stack(Board_object* buf, int num, Player player)
 {
+    assert(player != PLAYER_NONE);
     assert(num >= 8);
     
     Stack* st = &(game.stacks[player]);
@@ -305,41 +355,6 @@ void get_stack(Board_object* buf, int num, Player player)
     }
 }
 
-Success claim_victory(Player player)
-{
-    assert(player == game.turn);
-    Stack player_stack = game.stacks[player];
-    
-    int link_card_count = 0;
-    for (int i = 0; i < player_stack.ptr; i++)
-    {
-        if (player_stack.card[i]->type == LINK) {
-            link_card_count++;
-        }
-    }
-    if (link_card_count > 3)
-    {
-        return VALID;
-    }
-
-    Player opponent = player == PLAYER1 ? PLAYER2 : PLAYER1;
-    Stack opponent_stack = game.stacks[opponent];
-    int virus_card_count = 0;
-
-    for (int i = 0; i < opponent_stack.ptr; i++)
-    {
-        if (opponent_stack.card[i]->type == VIRUS && opponent_stack.card[i]->visibility == REVEALED) {
-            virus_card_count++;
-        }
-    }
-    if (virus_card_count > 3)
-    {
-        return VALID;
-    }
-
-    return INVALID;
-
-}
 
 Player get_winner()
 {

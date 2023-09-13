@@ -15,7 +15,8 @@ typedef bool Success; //TODO: Determine if success variable is needed
 typedef enum
 {
     PLAYER1 = 0,
-    PLAYER2 = 1
+    PLAYER2 = 1,
+    PLAYER_NONE
 } Player;
 
 typedef enum
